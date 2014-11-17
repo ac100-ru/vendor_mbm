@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) ST-Ericsson AB 2008-2014
+** Copyright (C) ST-Ericsson AB 2008-2010
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,10 +24,6 @@
 #include <memory.h>
 #include <errno.h>
 #include <stdio.h>
-#include <sys/time.h>
-#include <time.h>
-
-#include "u300-ril.h"
 
 #define LOG_TAG "RILV"
 #include <utils/Log.h>

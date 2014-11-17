@@ -233,5 +233,4 @@ typedef enum {
     GENERIC_ERROR,
     UNKNOWN_ERROR,
 } AT_Error_type;
-
-#endif /* ATERROR_H */
+#endif

@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) ST-Ericsson AB 2008-2014
+** Copyright (C) ST-Ericsson AB 2008-2009
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,14 +29,6 @@
         enqueueRILEventName(isPrio, callback, \
                      param, relativeTime, #callback)
 
-#ifdef MBM_ICS
-#define ALOGW LOGW
-#define ALOGI LOGI
-#define ALOGD LOGD
-#define ALOGE LOGE
-#define ALOGV LOGV
-#endif
-
 void getScreenStateLock(void);
 int getScreenState(void);
 void setScreenState(int screenState);
@@ -58,7 +50,7 @@ void enqueueRILEventName(int isPrio, void (*callback) (void *param),
 #define RIL_CID_IP 1
 
 /* Maximum number of neighborhood cells is set based on AT specification.
- * It can handle a maximum of 16 cells, including the current cell. */
+ * Can handle maximum of 16, including the current cell. */
 #define MAX_NUM_NEIGHBOR_CELLS 15
 
-#endif /* U300_RIL_H */
+#endif

@@ -28,5 +28,4 @@ int at_tok_nextstr(char **p_cur, char **out);
 int at_tok_hasmore(char **p_cur);
 
 int at_tok_charcounter(char *p_in, char needle, int *p_out);
-
-#endif /* AT_TOK_H */
+#endif

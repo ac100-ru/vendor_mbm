@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) ST-Ericsson AB 2008-2014
+** Copyright (C) ST-Ericsson AB 2008-2010
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,4 +44,5 @@ int init_stk_service(void);
 int get_stk_service_running(void);
 void set_stk_service_running(int running);
 
-#endif /* U300_RIL_STK_H */
+
+#endif

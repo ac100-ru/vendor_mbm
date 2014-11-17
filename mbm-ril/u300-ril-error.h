@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
  *
- * Copyright (C) Ericsson AB 2010-2014
+ * Copyright (C) Ericsson AB 2010
  * Copyright 2006, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -123,4 +123,4 @@ void mbm_check_error_cause(void);
 const char *errorCauseToString(int cause);
 const char *e2napStateToString(int state);
 
-#endif /* U300_RIL_ERROR_H */
+#endif

@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) ST-Ericsson AB 2008-2014
+** Copyright (C) ST-Ericsson AB 2008-2009
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,4 +43,4 @@ void pollSIMState(void *param);
 
 void setPollSIMState(void *param);
 
-#endif /* U300_RIL_SIM_H */
+#endif

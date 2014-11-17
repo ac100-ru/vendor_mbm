@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
  *
- * Copyright (C) ST-Ericsson AB 2008-2014
+ * Copyright (C) ST-Ericsson AB 2008-2009
  * Copyright 2006, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +57,7 @@
 #define LOG_TAG "RIL"
 #include <utils/Log.h>
 
-#define RIL_VERSION_STRING "MBM u300-ril 4.0-beta"
+#define RIL_VERSION_STRING "MBM u300-ril 4.0.0.0-beta"
 
 #define MAX_AT_RESPONSE 0x1000
 
@@ -71,7 +71,7 @@
 #define TIMEOUT_SEARCH_FOR_TTY 1 /* Poll every Xs for the port*/
 #define TIMEOUT_EMRDY 15 /* Module should respond at least within 15s */
 #define TIMEOUT_DEVICE_REMOVED 3
-#define MAX_BUF 2048
+#define MAX_BUF 1024
 
 /*** Global Variables ***/
 char* ril_iface;
@@ -283,59 +283,21 @@ void setScreenState(int screenState)
 {
     if (screenState == 1) {
         /* Screen is on - be sure to enable all unsolicited notifications again. */
-
-        /* Configure Network Registration Status.
-        *  Configure Packet Domain Network Rregistration Status
-        *     n = 0 - disable network registration unsolicited result code.
-        *       = 1 - enable network registration unsolicited result code.
-        *       = 2 - enable network registration and location information unsolicited
-        *             result code.
-        */
         at_send_command("AT+CREG=2");
         at_send_command("AT+CGREG=2");
-
-        /* Configure Packet Domain Event Reporting.
-        *  mode = 0 - buffer unsolicited result codes in the MT. No codes are
-        *             forwarded to the TE.
-        *       = 1 - discard unsolicited result codes when MT-TE link is reserved,
-        *             for example, in online data mode), otherwise forward them
-        *             directly to the TE.
-        *   bfr = 0 - MT buffer of unsolicited result codes defined within this
-        *             command is cleared when <mode> 1 is entered
-        */
         at_send_command("AT+CGEREP=1,0");
 
         isSimSmsStorageFull(NULL);
         pollSignalStrength((void *)-1);
 
-        /* Configure Mobile Equipment Event Reporting.
-        * mode = 0 - buffer unsolicited result codes in the phone. If the phone
-        *            result code buffer is full, codes can be buffered elsewhere
-        *            orthe oldest ones can be removed to make room for the new ones.
-        *      = 3 - forward the unsolicited result codes directly to the terminal
-        *            equipment. Phone terminal equipment link-specific in-band
-        *            technique used to embed result codes and data when phone is
-        *            in on-line data mode.
-        * keyp = 0 - no keypad event reporting.
-        *      = 2 - enables keypad event reporting using +CKEV: <key>,<press>.
-        * disp = 0 - no display event reporting.
-        *  ind = 0 - no indicator event reporting
-        *        1 - indicator event reporting using +CIEV: <ind>,<value>.
-        *            <ind> indicates the indicator order number (as specified for
-        *            +CIND) and <value> is the new value of indicator. Only those
-        *            indicator events, which are not caused by +CIND shall be
-        *            indicated by the TA to the TE.
-        *  bfr = 0 - TA buffer of unsolicited result codes defined within this
-        *            command is cleared when <mode> 1...3 is entered.
-        */
-        at_send_command("AT+CMER=3,0,0,1,0");
+        at_send_command("AT+CMER=3,0,0,1");
 
     } else if (screenState == 0) {
         /* Screen is off - disable all unsolicited notifications. */
         at_send_command("AT+CREG=0");
         at_send_command("AT+CGREG=0");
         at_send_command("AT+CGEREP=0,0");
-        at_send_command("AT+CMER=3,0,0,0,0");
+        at_send_command("AT+CMER=3,0,0,0");
     }
 }
 
@@ -348,9 +310,8 @@ static void requestScreenState(void *data, size_t datalen, RIL_Token t)
     if (datalen < sizeof(int *))
         goto error;
 
-    /* No point of enabling unsolicited if radio is off
-       or SIM is locked */
-    if (RADIO_STATE_SIM_READY != getRadioState())
+    /* No point of enabling unsolicited if radio is off */
+    if (RADIO_STATE_OFF == getRadioState())
         goto success;
 
     s_screenState = ((int *) data)[0];
@@ -398,7 +359,6 @@ static char isPrioRequest(int request)
 
 static void processRequest(int request, void *data, size_t datalen, RIL_Token t)
 {
-    char prop[PROPERTY_VALUE_MAX];
     ALOGD("%s() %s", __func__, requestToString(request));
 
     /*
@@ -578,15 +538,8 @@ static void processRequest(int request, void *data, size_t datalen, RIL_Token t)
             requestGprsRegistrationState(request, data, datalen, t);
             break;
         case RIL_REQUEST_GET_NEIGHBORING_CELL_IDS:
-            property_get("mbm.ril.config.nci", prop, "no");
-            if (strstr(prop, "no")) {
-                RIL_onRequestComplete(t, RIL_E_REQUEST_NOT_SUPPORTED, NULL, 0);
-                break;
-            }
-            else {
-                requestNeighboringCellIDs(data, datalen, t);
-                break;
-            }
+            requestNeighboringCellIDs(data, datalen, t);
+            break;
 
         /* OEM */
         /* case RIL_REQUEST_OEM_HOOK_RAW:
@@ -978,6 +931,10 @@ static void onATReaderClosed(void)
 /* Called on command thread. */
 static void onATTimeout(void)
 {
+    static int strike = 0;
+
+    strike++;
+
     ALOGD("%s() AT channel timeout", __func__);
 
      /* Last resort, throw escape on the line, close the channel
@@ -989,7 +946,14 @@ static void onATTimeout(void)
     setRadioState(RADIO_STATE_UNAVAILABLE);
     signalCloseQueues();
 
-    /* TODO We may cause a radio reset here. */
+    /* Eperimental reboot of module on HP Touchpad 4G */
+    if (strike == 2) {
+        strike = 0;
+        ALOGW("*** Cold booting module ***");
+        system("echo 0 > /sys/bus/platform/devices/mdmgpio/mdm_poweron");
+        sleep(1);
+        system("echo 1 > /sys/bus/platform/devices/mdmgpio/mdm_poweron");
+    }
 }
 
 static void usage(char *s)
@@ -1251,7 +1215,6 @@ static void *queueRunner(void *param)
            device is being removed from filesystem */
 
         int i = TIMEOUT_DEVICE_REMOVED;
-        sleep(1);
         while((i--) && (stat(queueArgs->device_path, &sb) == 0)) {
             ALOGD("%s() Waiting for %s to be removed (%d)...", __func__,
                 queueArgs->device_path, i);

@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
  **
- ** Copyright (C) ST-Ericsson AB 2008-2014
+ ** Copyright (C) ST-Ericsson AB 2008-2009
  ** Copyright 2006, The Android Open Source Project
  **
  ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,6 @@
 #include <cutils/properties.h>
 #include "u300-ril-error.h"
 #include "u300-ril-pdp.h"
-#include "u300-ril-network.h"
 
 #define LOG_TAG "RIL"
 #include <utils/Log.h>
@@ -738,8 +737,6 @@ down:
     free(addresses);
     free(gateways);
     free(dnses);
-
-    startPollFastDormancy();
 
     return;
 

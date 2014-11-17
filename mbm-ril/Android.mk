@@ -1,4 +1,4 @@
-# Copyright (C) ST-Ericsson AB 2008-2014
+# Copyright (C) ST-Ericsson AB 2008-2009
 # Copyright 2006 The Android Open Source Project
 #
 # Based on reference-ril
@@ -9,33 +9,6 @@
 #
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
-
-# Android version based on API (PLATFORM_SDK_VERSION)
-#
-# API Level 14 Android 4.0 to 4.0.2 Ice Cream Sandwich
-# API Level 15 Android 4.0.3 to 4.0.4 Ice Cream Sandwich
-# API Level 16 Android 4.1 Jelly Bean
-# API Level 17 Android 4.2 Jelly Bean
-# API Level 18 Android 4.3 Jelly Bean
-# API Level 19 Android 4.4 KitKat
-# 
-# API 14, 15, and 16 supported
-# API 17, 18, and 19 not verified
-#
-API_ICS:= 14 15
-API_JB:= 16
-API_SUPPORTED:= $(API_ICS) $(API_JB)
-
-# Check if supported
-ifeq "$(findstring $(PLATFORM_SDK_VERSION),$(API_SUPPORTED))" ""
-  $(error -- Unsupported Android version; $(PLATFORM_SDK_VERSION))
-endif
-
-# If supported Ice Cream Sandwich API
-ifneq "$(findstring $(PLATFORM_SDK_VERSION), $(API_ICS))" ""
-  MBM_ICS := true
-  $(warning MBM RIL: Ice Cream Sandwich is set: $(MBM_ICS))
-endif
 
 LOCAL_SRC_FILES:= \
     u300-ril.c \
@@ -90,8 +63,5 @@ LOCAL_LDLIBS += -lpthread
 LOCAL_LDLIBS += -lrt
 LOCAL_CFLAGS += -DRIL_SHLIB
 LOCAL_CFLAGS += -Wall
-ifdef MBM_ICS
-LOCAL_CFLAGS += -DMBM_ICS
-endif
 LOCAL_MODULE:= libmbm-ril
 include $(BUILD_SHARED_LIBRARY)

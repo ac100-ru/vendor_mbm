@@ -30,4 +30,4 @@ void readDeviceInfo(void);
  */
 char *getDeviceInfo(const char *info);
 
-#endif /* U300_RIL_INFORMATION_H */
+#endif

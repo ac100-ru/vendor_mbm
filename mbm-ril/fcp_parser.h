@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) ST-Ericsson AB 2008-2014
+** Copyright (C) ST-Ericsson AB 2008-2010
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,4 +44,4 @@ int fcp_to_ts_51011(/*in*/ const char *stream,
                     /*in*/ size_t len,
                     /*out*/ struct ts_51011_921_resp *out);
 
-#endif /* FCP_PARSER_H */
+#endif

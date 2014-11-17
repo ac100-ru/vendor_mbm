@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) ST-Ericsson AB 2008-2014
+** Copyright (C) ST-Ericsson AB 2008-2009
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,7 @@ void requestSetPreferredNetworkType(void *data, size_t datalen, RIL_Token t);
 void requestGetPreferredNetworkType(void *data, size_t datalen, RIL_Token t);
 void requestEnterNetworkDepersonalization(void *data, size_t datalen, RIL_Token t);
 void requestQueryNetworkSelectionMode(void *data, size_t datalen, RIL_Token t);
-void requestSignalStrength(void *data, size_t datalen, RIL_Token t);
+void requestSignalStrength(void *data, size_t datalen, RIL_Token t); 
 void requestRegistrationState(int request, void *data, size_t datalen, RIL_Token t);
 void requestGprsRegistrationState(int request, void *data, size_t datalen, RIL_Token t);
 void requestOperator(void *data, size_t datalen, RIL_Token t);
@@ -55,6 +55,4 @@ void Get_GSM_NCIs(RIL_Token t);
 void Get_WCDMA_NCIs(RIL_Token t);
 void No_NCIs(RIL_Token t);
 
-void startPollFastDormancy(void);
-
-#endif /* U300_RIL_NETWORK_H */
+#endif

@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) Ericsson AB 2011-2014
+** Copyright (C) Ericsson AB 2011
 ** Copyright (C) ST-Ericsson AB 2008-2010
 ** Copyright 2006, The Android Open Source Project
 **
@@ -346,7 +346,6 @@ void onSIMReady(void *p)
 {
     int err = 0;
     int screenState;
-    char prop[PROPERTY_VALUE_MAX];
     (void) p;
 
     /* Check if ME is ready to set preferred message storage */
@@ -387,16 +386,10 @@ void onSIMReady(void *p)
     /* Subscribe to time zone/NITZ reporting.
      *
      */
-    property_get("mbm.ril.config.nitz", prop, "yes");
-    if (strstr(prop, "yes")) {
-        err = at_send_command("AT*ETZR=3");
-        if (err != AT_NOERROR) {
-            ALOGD("%s() Degrading nitz to mode 2", __func__);
-            at_send_command("AT*ETZR=2");
-        }
-    } else {
-        at_send_command("AT*ETZR=0");
-        ALOGW("%s() Network Time Zone (NITZ) disabled!", __func__);
+    err = at_send_command("AT*ETZR=3");
+    if (err != AT_NOERROR) {
+        ALOGD("%s() Degrading nitz to mode 2", __func__);
+        at_send_command("AT*ETZR=2");
     }
 
     /* Delete Internet Account Configuration.
@@ -448,11 +441,9 @@ static const char *radioStateToString(RIL_RadioState radioState)
     case RADIO_STATE_NV_READY:
         state = "RADIO_STATE_NV_READY";
         break;
-#ifndef MBM_ICS
     case RADIO_STATE_ON:
         state = "RADIO_STATE_ON";
         break;
-#endif /* MBM_ICS */
     default:
         state = "RADIO_STATE_<> Unknown!";
         break;

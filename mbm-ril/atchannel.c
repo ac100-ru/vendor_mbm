@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) ST-Ericsson AB 2008-2014
+** Copyright (C) ST-Ericsson AB 2008-2009
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,9 +35,8 @@
 #include <time.h>
 #include <unistd.h>
 #include <stdarg.h>
-#include <poll.h>
 
-#include "u300-ril.h"
+#include <poll.h>
 
 #define LOG_NDEBUG 0
 #define LOG_TAG "AT"

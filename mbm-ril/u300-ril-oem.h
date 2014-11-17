@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) ST-Ericsson AB 2008-2014
+** Copyright (C) ST-Ericsson AB 2008-2009
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,4 +27,4 @@
 void requestOEMHookRaw(void *data, size_t datalen, RIL_Token t);
 void requestOEMHookStrings(void *data, size_t datalen, RIL_Token t);
 
-#endif /* U300_RIL_OEM_H */
+#endif

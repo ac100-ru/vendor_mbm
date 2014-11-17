@@ -1,6 +1,6 @@
 /* Ericsson MBM RIL
  *
- * Copyright (C) Ericsson AB 2011-2014
+ * Copyright (C) Ericsson AB 2011
  * Copyright 2006, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

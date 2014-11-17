@@ -1,6 +1,6 @@
 /* ST-Ericsson U300 RIL
 **
-** Copyright (C) ST-Ericsson AB 2008-2014
+** Copyright (C) ST-Ericsson AB 2008-2009
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,8 +45,6 @@ static void *dummyDispatch(void *data, size_t datalen);
 #define dispatchRilCdmaSmsWriteArgs dummyDispatch
 #define dispatchCdmaSubscriptionSource dummyDispatch
 #define dispatchVoiceRadioTech dummyDispatch
-#define dispatchSetInitialAttachApn dummyDispatch
-#define dispatchImsSms dummyDispatch
 
 static void *dispatchCallForward(void *data, size_t datalen);
 static void *dispatchDial(void *data, size_t datalen);
@@ -59,7 +57,6 @@ static void *dispatchVoid(void *data, size_t datalen);
 static void *dispatchGsmBrSmsCnf(void *data, size_t datalen);
 
 #define dispatchInts dispatchRaw
-#define dispatchDataCall dispatchStrings
 
 static void dummyResponse(void);
 
@@ -75,12 +72,14 @@ static void dummyResponse(void);
 #define responseStrings dummyResponse
 #define responseVoid dummyResponse
 #define responseStringsNetworks dummyResponse
-#define responseCellInfoList dummyResponse
+
 #define responseSimStatus dummyResponse
 #define responseRilSignalStrength dummyResponse
 #define responseDataCallList dummyResponse
 #define responseGsmBrSmsCnf dummyResponse
 #define responseCdmaBrSmsCnf dummyResponse
+
+#define dispatchDataCall dispatchStrings
 #define responseSetupDataCall responseStrings
 
 /*
